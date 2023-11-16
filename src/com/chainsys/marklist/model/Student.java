@@ -32,7 +32,7 @@ public class Student {
 	}
 	
 	public String toString() {
-		return "Student [sid=" + sid + ", sname= " + sname + ", sperc=" +sperc+ "]";
+		return   sid + "\t" +sname +"\t" + sperc ;
 	}
 	
 }

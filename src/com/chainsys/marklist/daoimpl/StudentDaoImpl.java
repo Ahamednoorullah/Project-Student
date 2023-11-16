@@ -18,19 +18,19 @@ import com.chainsys.marklist.dao.StudentDAO;
 public class StudentDaoImpl implements StudentDAO {
 	
 
-	@Override
-	public boolean validation(int sid,String sname,double sperc) {
-	
-		System.out.println(sid);
-//		Pattern p = Pattern.compile("^[a-zA-Z]*$");
-//		Matcher m = p.matcher(sname);
-		if (sid > 0 && (sname.matches("^[a-zA-Z]*$"))&& (sname != null) &&(!sname.equals(" "))&& sperc > 0) {
-			return true;
-		} else {
-            return false;
-		}
-	
-	}
+//	@Override
+//	public boolean validation(int sid,String sname,double sperc) {
+//	
+//		System.out.println(sid);
+////		Pattern p = Pattern.compile("^[a-zA-Z]*$");
+////		Matcher m = p.matcher(sname);
+//		if (sid > 0 && (sname.matches("^[a-zA-Z]*$"))&& (sname != null) &&(!sname.equals(" "))&& sperc > 0) {
+//			return true;
+//		} else {
+//            return false;
+//		}
+//	
+//	}
 
 	@Override
 	public void insertStudent(int sid, String sname, double sperc) throws SQLException {
@@ -48,6 +48,7 @@ public class StudentDaoImpl implements StudentDAO {
 		}
 	}
 
+	
 	@Override
 	public void deleteStudent(int sid) throws SQLException {
 		String query = "delete from studentmarklist where sid="+sid;
@@ -59,7 +60,7 @@ public class StudentDaoImpl implements StudentDAO {
 		if (nor1 == 1) {
 			System.out.println("Student Deleted Successfully..");
 		} else {
-			System.out.println("Invalid Student Id..");
+			System.out.println("This Id is Not in StudentList..");
 		}
 		
 	}
@@ -107,15 +108,20 @@ public class StudentDaoImpl implements StudentDAO {
 		
 	}
 
+
 	@Override
-	public boolean dbValidation(int sid) throws SQLException {
-		List<Student> li = displayAll();
-		if (li.contains(sid)) {
-			return false;
+	public int updateStudent(Student student ) throws SQLException {
+		String query = "update studentmarklist set sname='"+student.getSname()+"',sperc="+student.getSperc()+" where sid ="+student.getSid();
+		Connection con = DbUtility.getConnection();
+		Statement stmt = con.createStatement();
+		int noru = stmt.executeUpdate(query);
+		if (noru==1) {
+			return 1;
 		} else {
-            return true;
+            return 0;
 		}
 	}
+
 
 	
 	
