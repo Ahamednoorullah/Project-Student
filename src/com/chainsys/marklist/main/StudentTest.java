@@ -1,22 +1,26 @@
 package com.chainsys.marklist.main;
 
 import java.sql.SQLException;
+
 import java.util.Scanner;
 
 import com.chainsys.marklist.model.Student;
 import com.chainsys.marklist.dao.StudentDAO;
 import com.chainsys.marklist.daoimpl.StudentDaoImpl;
 import com.chainsys.marklist.valid.Validation;
+import com.chainsys.marklist.subject.*;
 
 public class StudentTest {
 
 	public static void main(String[] args) throws SQLException {
 		Scanner sc = new Scanner(System.in);
 		Student student = new Student();
-		StudentDAO dao = new StudentDaoImpl();
+		StudentMark sm = new StudentMark();
+		MarkImpl mark = new MarkImpl();
+ 		StudentDAO dao = new StudentDaoImpl();
 		do {
 			System.out.println(
-					"Enter 1,Insert\t2,Delete,3,ListOfStudentName\t4,DispalyAllStudentDetails\t5,Save \t6,Update\t7,Exit");
+					"Enter 1,Insert\t2,Delete,\t3,ListOfStudentName\t4,DispalyAllStudentDetails\n5,Save\t6,Update\t7,InsertMark\t8,DisplayMark\t9,Exit");
 
 			int chioce = sc.nextInt();
 
@@ -55,6 +59,7 @@ public class StudentTest {
 				break;
 
 			case 4:
+				System.out.println("StdID\tStdName\tStdPerc");
 				for (Student s : dao.displayAll()) {
 					System.out.println(s.toString());
 				}
@@ -120,6 +125,37 @@ public class StudentTest {
 
 				break;
 			case 7:
+				System.out.println("Enter Student ID");
+				student.setSid(sc.nextInt());
+                System.out.println("Enter 1st Subject Mark");
+				sm.setSub1(sc.nextInt());
+				System.out.println(sm.getSub1());
+				System.out.println("Enter 2nd Subject Mark");
+				sm.setSub2(sc.nextInt());
+				System.out.println("Enter 3rd Subject Mark");
+				sm.setSub3(sc.nextInt());
+				Validation markValid = new Validation(sm.getSub1(), sm.getSub2(), sm.getSub3(),student.getSid());
+				boolean mValid = markValid.markValid();
+				boolean markDBValid = markValid.getDBValid();
+				if (mValid==true) {
+					if (markDBValid==true) {
+						mark.insertMark(student.getSid(),sm.getSub1(),sm.getSub2(),sm.getSub3());
+						
+					} else {
+						System.out.println("This Id is Not Valid");
+					}
+					
+				} else {
+                   System.out.println("Mark Not Valided..");
+				}
+				
+				break;
+				
+			case 8:
+				System.out.println("Student\tSub1\tSub2\tSub3");
+				mark.displayMark();
+				break;
+			case 9:
 				System.out.println("Thank You Using Application");
 				System.exit(0);
 			default:

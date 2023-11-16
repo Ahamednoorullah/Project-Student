@@ -35,7 +35,7 @@ public class StudentDaoImpl implements StudentDAO {
 	@Override
 	public void insertStudent(int sid, String sname, double sperc) throws SQLException {
          
-		String query = "insert into studentmarklist values("+sid+",'"+sname+"',"+sperc+")";
+		String query = "insert into studentdetails values("+sid+",'"+sname+"',"+sperc+")";
 		Connection con = DbUtility.getConnection();
 		Statement stmt = con.createStatement();
 		
@@ -51,7 +51,7 @@ public class StudentDaoImpl implements StudentDAO {
 	
 	@Override
 	public void deleteStudent(int sid) throws SQLException {
-		String query = "delete from studentmarklist where sid="+sid;
+		String query = "delete from studentdetails where sid="+sid;
 		Connection con = DbUtility.getConnection();
 		Statement stmt = con.createStatement();
 		
@@ -67,7 +67,7 @@ public class StudentDaoImpl implements StudentDAO {
 
 	@Override
 	public void listofStudent() throws SQLException {
-		String query = "select sname from studentmarklist";
+		String query = "select sname from studentdetails";
 		Connection con = DbUtility.getConnection();
 		Statement stmt = con.createStatement();
 		
@@ -80,7 +80,7 @@ public class StudentDaoImpl implements StudentDAO {
 	@Override
 	public List<Student> displayAll() throws SQLException {
 		List<Student> list= new ArrayList<>();
-		String query = "select * from studentmarklist";
+		String query = "select sid,sname,sperc from studentdetails";
 		Connection con = DbUtility.getConnection();
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
@@ -94,7 +94,7 @@ public class StudentDaoImpl implements StudentDAO {
 
 	@Override
 	public int saveStudent(Student student) throws SQLException {
-		String query = "insert into studentmarklist values("+student.getSid()+",'"+student.getSname()+"',"+student.getSperc()+")";
+		String query = "insert into studentdetails values("+student.getSid()+",'"+student.getSname()+"',"+student.getSperc()+")";
 		Connection con = DbUtility.getConnection();
 		Statement stmt = con.createStatement();
 		
@@ -111,7 +111,7 @@ public class StudentDaoImpl implements StudentDAO {
 
 	@Override
 	public int updateStudent(Student student ) throws SQLException {
-		String query = "update studentmarklist set sname='"+student.getSname()+"',sperc="+student.getSperc()+" where sid ="+student.getSid();
+		String query = "update studentdetails set sname='"+student.getSname()+"',sperc="+student.getSperc()+" where sid ="+student.getSid();
 		Connection con = DbUtility.getConnection();
 		Statement stmt = con.createStatement();
 		int noru = stmt.executeUpdate(query);
