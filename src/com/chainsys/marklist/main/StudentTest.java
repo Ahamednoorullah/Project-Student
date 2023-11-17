@@ -1,7 +1,10 @@
 package com.chainsys.marklist.main;
 
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 import com.chainsys.marklist.model.Student;
@@ -17,10 +20,11 @@ public class StudentTest {
 		Student student = new Student();
 		StudentMark sm = new StudentMark();
 		MarkImpl mark = new MarkImpl();
- 		StudentDAO dao = new StudentDaoImpl();
+		List<StudentMark> li = new ArrayList<>();
+		StudentDAO dao = new StudentDaoImpl();
 		do {
-			System.out.println(
-					"Enter 1,Insert\t2,Delete,\t3,ListOfStudentName\t4,DispalyAllStudentDetails\n5,Save\t6,Update\t7,InsertMark\t8,DisplayMark\t9,Exit");
+			System.out.println("\nEnter 1,Insert\t2,Delete,\t3,ListOfStudentName\t4,DispalyAllStudentDetails\n5,Save\t"
+					+ "6,Update\t7,InsertMark\t8,DisplayMark\t9,Perc_Ascending\t10,SubjectMarkAscending\n11,Exit");
 
 			int chioce = sc.nextInt();
 
@@ -127,35 +131,86 @@ public class StudentTest {
 			case 7:
 				System.out.println("Enter Student ID");
 				student.setSid(sc.nextInt());
-                System.out.println("Enter 1st Subject Mark");
+				System.out.println("Enter 1st Subject Mark");
 				sm.setSub1(sc.nextInt());
 				System.out.println(sm.getSub1());
 				System.out.println("Enter 2nd Subject Mark");
 				sm.setSub2(sc.nextInt());
 				System.out.println("Enter 3rd Subject Mark");
 				sm.setSub3(sc.nextInt());
-				Validation markValid = new Validation(sm.getSub1(), sm.getSub2(), sm.getSub3(),student.getSid());
+				double perc = sm.getSub1() + sm.getSub2() + sm.getSub3();
+				perc = (perc / 300) * 100;
+				sm.setPercentage(perc);
+				Validation markValid = new Validation(sm.getSub1(), sm.getSub2(), sm.getSub3(), student.getSid());
 				boolean mValid = markValid.markValid();
 				boolean markDBValid = markValid.getDBValid();
-				if (mValid==true) {
-					if (markDBValid==true) {
-						mark.insertMark(student.getSid(),sm.getSub1(),sm.getSub2(),sm.getSub3());
-						
+				if (mValid == true) {
+					if (markDBValid == true) {
+						mark.insertMark(student.getSid(), sm.getSub1(), sm.getSub2(), sm.getSub3(), sm.getPercentage());
+
 					} else {
 						System.out.println("This Id is Not Valid");
 					}
-					
+
 				} else {
-                   System.out.println("Mark Not Valided..");
+					System.out.println("Mark Not Valided..");
 				}
-				
+
 				break;
-				
+
 			case 8:
-				System.out.println("Student\tSub1\tSub2\tSub3");
-				mark.displayMark();
+				System.out.println("StdID\tSub1\tSub2\tSub3\tPerc");
+				for (StudentMark studentMark : mark.displayMark()) {
+					System.out.println(studentMark.toString());
+				}
+
 				break;
 			case 9:
+
+				li = mark.displayMark();
+				Collections.sort(li, sm.stdMark);
+				System.out.println("StdID\tSub1\tSub2\tSub3\tPerc");
+				for (StudentMark str : li) {
+					System.out.println(str);
+				}
+				break;
+			case 10:
+
+				li = mark.displayMark();
+				int choice = 0;
+				System.out.println("Enter Subject ID '1 to 3'");
+				choice = sc.nextInt();
+				switch (choice) {
+				case 1:
+					Collections.sort(li, sm.firstSubjectAscend);
+					System.out.println("StdID\tSub1\tSub2\tSub3\tPerc");
+					for (StudentMark str : li) {
+						System.out.println(str);
+					}
+					break;
+				case 2:
+					Collections.sort(li, sm.secondSubjectAscend);
+					System.out.println("StdID\tSub1\tSub2\tSub3\tPerc");
+					for (StudentMark str : li) {
+						System.out.println(str);
+					}
+					break;
+				case 3:
+					Collections.sort(li, sm.thirdSubjectAscend);
+					System.out.println("StdID\tSub1\tSub2\tSub3\tPerc");
+					for (StudentMark str : li) {
+						System.out.println(str);
+					}
+					break;
+
+				default:
+					System.out.println("Not Valid Subject..");
+					break;
+
+				}
+
+				break;
+			case 11:
 				System.out.println("Thank You Using Application");
 				System.exit(0);
 			default:
